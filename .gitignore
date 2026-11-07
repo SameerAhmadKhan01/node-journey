@@ -1,0 +1,7 @@
+# Ignores node_modules in the root and any subfolder
+node_modules/
+
+# Ignores .env and related environment files everywhere
+.env
+.env.*
+!.env.example
