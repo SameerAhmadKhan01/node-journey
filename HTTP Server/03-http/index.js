@@ -1,13 +1,13 @@
 const http = require("node:http");
-const fs = require("node:fs")
+const fs = require("node:fs");
 
 const server = http.createServer((req, res) => {
   console.log("Server is running on PORT: 8000");
   const request = req.url;
   const method = req.method;
 
-  const log = `\n[${Date.now()}] : ${request} ${method}`
-  fs.appendFileSync('log.txt',log,'utf-8')
+  const log = `\n[${Date.now()}] : ${request} ${method}`;
+  fs.appendFileSync("log.txt", log, "utf-8");
 
   switch (method) {
     case "GET":
@@ -32,6 +32,8 @@ const server = http.createServer((req, res) => {
         }
       }
       break;
+    default:
+      return res.writeHead(404).end("You are Lost Man :(");
   }
 });
 
