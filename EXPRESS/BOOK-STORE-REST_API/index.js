@@ -10,23 +10,36 @@ const books = [
   { id: 2, title: "Book Two", author: "Author Two" },
 ];
 
+//MIDDLEWARES. -> plugin
+app.use(express.json());
 
 // ROUTES
-app.get('/books' , (req , res) => {
-    return res.json(books);
-})//getting all books
+app.get("/books", (req, res) => {
+  return res.json(books);
+}); //getting all books
 
 //getting book by id
-app.get('/books/:id' ,(req , res) => {
-    const id = parseInt(req.params.id);
-    if(isNaN(id)) return res.status(400).json({'error' : "ID Should be an integer"})
-    const book = books.find(e => e.id === id);
-    if(!book) return res.json('Book does not exist');
-    return res.json(book);
-})
+app.get("/books/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id))
+    return res.status(400).json({ error: "ID Should be an integer" });
+  const book = books.find((e) => e.id === id);
+  if (!book) return res.json("Book does not exist");
+  return res.json(book);
+});
 
-
+//route to append books
+app.post("/books", (req, res) => {
+  const { title, author } = req.body;
+  if (!title || title === "")
+    return res.status(400).json({ error: "title is required" });
+  const book = { id: books.length + 1, title, author };
+  books.push(book);
+  return res
+    .status(201)
+    .json({ message: "Book Added Succesfully", id: books.length });
+});
 
 app.listen(PORT, () => {
-  console.log("HTTP Server is running on PORT: ",PORT);
+  console.log("HTTP Server is running on PORT: ", PORT);
 });
