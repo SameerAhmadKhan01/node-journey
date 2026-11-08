@@ -19,7 +19,7 @@ app.get('/books' , (req , res) => {
 //getting book by id
 app.get('/books/:id' ,(req , res) => {
     const id = parseInt(req.params.id);
-    if(isNaN(id)) return res.json({'error' : "ID Should be an integer"})
+    if(isNaN(id)) return res.status(400).json({'error' : "ID Should be an integer"})
     const book = books.find(e => e.id === id);
     if(!book) return res.json('Book does not exist');
     return res.json(book);
