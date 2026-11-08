@@ -40,6 +40,19 @@ app.post("/books", (req, res) => {
     .json({ message: "Book Added Succesfully", id: books.length });
 });
 
+app.delete("/books/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id))
+    return res.status(400).json({ error: "ID Should be an integer" });
+
+  const indexToDelete = books.findIndex((e) => e.id === id);
+  if (indexToDelete < 0)
+    return res.status(400).json({ error: "Book Does Not Exist" });
+  books.splice(indexToDelete, 1);
+
+  return res.status(201).json({ Message: "Book Deleted Succesfully" });
+});
+
 app.listen(PORT, () => {
   console.log("HTTP Server is running on PORT: ", PORT);
 });
