@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("node:fs");
 
 const app = express();
 
@@ -12,6 +13,13 @@ const books = [
 
 //MIDDLEWARES. -> plugin
 app.use(express.json());
+
+//defined a middleware to log all types of request
+app.use((req, res, next) => {
+  const log = `\n[${Date.now()}] ${req.method} ${req.path}`;
+  fs.appendFileSync("log.txt", log, "utf-8");
+  next(); //calls next route or middleware
+});
 
 // ROUTES
 app.get("/books", (req, res) => {
