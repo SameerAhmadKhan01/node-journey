@@ -7,3 +7,6 @@ services:
       POSTGRES_DB: YOUR_DB_NAME
       POSTGRES_USER: YOUR USERNAME
       POSTGRES_PASSWORD: YOUR PASS
+
+
+# make a file 'docker-compose.yml' and then copy these along with ur details
