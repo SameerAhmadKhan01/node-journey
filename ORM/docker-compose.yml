@@ -4,6 +4,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6205
+      POSTGRES_DB: YOUR_DB_NAME
+      POSTGRES_USER: YOUR USERNAME
+      POSTGRES_PASSWORD: YOUR PASS
+
+
+# make a file 'docker-compose.yml' and then copy these along with ur details
