@@ -1,4 +1,5 @@
 const booksTable = require("../models/book.model");
+const authorsTable = require("../models/author.model")
 const db = require("../db");
 const {sql} = require("drizzle-orm")
 const { eq, ilike } = require("drizzle-orm");
@@ -25,6 +26,7 @@ exports.getBookById = async function (req, res) {
     .select()
     .from(booksTable)
     .where((table) => eq(id, table.id))
+    .leftJoin(authorsTable, eq(booksTable.authorId , authorsTable.id))
     .limit(1);
   if (!book) return res.json("Book does not exist");
   return res.json(book);
