@@ -32,9 +32,13 @@ exports.createBook = async function (req, res) {
 };
 
 exports.deleteBookById = async function (req, res) {
-  const id = parseInt(req.params.id);
- 
-  await db.delete().from(booksTable).where(eq(booksTable.id , id))
+  const id = req.params.id;
 
-  return res.status(201).json({ Message: "Book Deleted Succesfully" });
+  const [deleted] = await db
+    .delete(booksTable)
+    .where(eq(booksTable.id, id))
+    .returning({ id: booksTable.id });
+
+  if (!deleted) return res.status(404).json({ error: "Book does not exist" });
+  return res.status(200).json({ message: "Book Deleted Successfully" });
 };
