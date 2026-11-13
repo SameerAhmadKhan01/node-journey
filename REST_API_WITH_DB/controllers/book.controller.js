@@ -22,7 +22,7 @@ exports.createBook = async function (req, res) {
   if (!title || title === "")
     return res.status(400).json({ error: "title is required" });
 
-  const [result] = await db.insert({title, authorId, description}).returning({
+  const [result] = await db.insert(booksTable).values({title, authorId, description}).returning({
     id: booksTable.id
   });
 
