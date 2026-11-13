@@ -10,7 +10,7 @@ exports.getAllBooks = async function (req, res) {
 exports.getBookById = async function (req, res) {
   const id = req.params.id;
 
-  const [book] = (await db.select().from(booksTable))
+  const [book] = await db.select().from(booksTable)
     .where((table) => eq(id, table.id))
     .limit(1);
   if (!book) return res.json("Book does not exist");
