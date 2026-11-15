@@ -9,6 +9,8 @@ app.use(express.json());
 const DIARY = {};
 const EMAILS = new Set();
 
+//SESSION BASED AUTHENTICATION
+
 // singup and give me back a token
 app.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
