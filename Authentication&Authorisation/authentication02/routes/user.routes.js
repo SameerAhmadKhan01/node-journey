@@ -6,8 +6,6 @@ import { randomBytes, createHmac } from "node:crypto";
 
 const router = express.Router();
 
-
-
 //signup
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
@@ -44,6 +42,34 @@ router.post("/signup", async (req, res) => {
   return res.status(201).json({ status: "success", data: { userId: user.id } });
 });
 
+//login
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const [existingUser] = await db
+    .select({
+      email: usersTable.email,
+      salt: usersTable.salt,
+      password: usersTable.password,
+    })
+    .from(usersTable)
+    .where((table) => eq(table.email, email));
 
+  if (!existingUser) {
+    return res
+      .status(400)
+      .json({ error: `User with email : ${email} does not exist` });
+  }
+
+  const salt = existingUser.salt;
+  const existingHash = existingUser.password;
+
+  const newHash = createHmac("sha256", salt).update(password).digest("hex");
+
+  if (newHash != existingHash)
+    return res.status(401).json({ error: "Invalid Password" });
+
+  //Generate a session for user
+  return res.json({status : 'Successful Login'})
+});
 
 export default router;
