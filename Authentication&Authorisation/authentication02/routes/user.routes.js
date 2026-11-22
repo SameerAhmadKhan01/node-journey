@@ -9,10 +9,10 @@ const router = express.Router();
 
 
 //signup
-router.get("/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
-  const existingUser = await db
+  const [existingUser] = await db
     .select({
       email: usersTable.email,
     })
@@ -41,7 +41,7 @@ router.get("/signup", async (req, res) => {
     })
     .returning({ id: usersTable.id });
 
-  return res.json(201).json({ status: "success", data: { userId: user.id } });
+  return res.status(201).json({ status: "success", data: { userId: user.id } });
 });
 
 
