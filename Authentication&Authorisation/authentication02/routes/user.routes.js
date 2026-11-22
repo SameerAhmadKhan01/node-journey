@@ -1,12 +1,15 @@
 import express from "express";
-import db from "../db";
-import { usersTable } from "../db/schema";
+import db from "../db/index.js";
+import { usersTable } from "../db/schema.js";
 import { eq } from "drizzle-orm";
+import { randomBytes, createHmac } from "node:crypto";
 
 const router = express.Router();
 
-//returns which user in logged in
-router.get("/", async (req, res) => {
+
+
+//signup
+router.get("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
   const existingUser = await db
@@ -22,16 +25,25 @@ router.get("/", async (req, res) => {
       .json({ error: `User with email ${email} already exists` });
   }
 
-  await db.insert(usersTable).values({
-    name,email,
-  })
+  //helps in hashing
+  const salt = randomBytes(256).toString("hex");
+  const hashedPassword = createHmac("sha256", salt)
+    .update(password)
+    .digest("hex");
 
+  const [user] = await db
+    .insert(usersTable)
+    .values({
+      name,
+      email,
+      password: hashedPassword,
+      salt,
+    })
+    .returning({ id: usersTable.id });
+
+  return res.json(201).json({ status: "success", data: { userId: user.id } });
 });
 
-//signup
-router.post("/signup");
 
-//login
-router.post("/login");
 
 export default router;
